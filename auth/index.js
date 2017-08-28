@@ -2,6 +2,10 @@
 // on Authentication with React
 
 auth = function(app){    
+    var passport = require('passport')
+    var GitHubStrategy = require('passport-github').Strategy;
+    var session = require('express-session');
+    var options = require('../appConfig');
 
     app.use(session({secret:'tswift', resave: true, saveUninitialized: true}))
 
