@@ -1,11 +1,13 @@
 // learned this pattern from Stephen Grider Udemy Tut 
 // on Authentication with React
 
-auth = function(app){    
+module.exports = function(app){    
     var passport = require('passport')
     var GitHubStrategy = require('passport-github').Strategy;
     var session = require('express-session');
     var options = require('../appConfig');
+
+    var User = require('../models/users');
 
     app.use(session({secret:'tswift', resave: true, saveUninitialized: true}))
 
@@ -24,6 +26,7 @@ auth = function(app){
     ));
 
     passport.serializeUser(function(user, done) {
+      console.log("user", user);
       done(null, user);
     });
 
@@ -37,7 +40,5 @@ auth = function(app){
       passport.authenticate('github', { failureRedirect: '/' }), 
       function(req, res) {
       res.redirect('/users');
-    })
-;}
-
-module.exports = auth
+    });
+}
