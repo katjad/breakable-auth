@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var Item = require('../models/items')
 
-/* GET users listing. */
+/* GET items listing. */
 router.get('/items', function(req, res, next) {
   res.render('items', { title: "All items"});
 });

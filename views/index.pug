@@ -10,7 +10,13 @@ block content
                 .field
                 a(href='/auth/github').ui.fluid.large.blue.button
                     i.github.icon
-                    | Sign in with GitHub
-            .ui.error.message
-             a(href='#') Sign up 
+                    | Sign in with GitHub 
+        div
+            p &nbsp;
+            p &nbsp;                  
+        div 
+            button#viewItems Check out protected content
+block footer
+    script(src="/javascripts/checkAuth.js")
+
 

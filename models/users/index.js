@@ -16,6 +16,10 @@ const User = sequelize.define('user', {
     },
     email: {
         type: Sequelize.STRING
+    },
+    github_id: {
+        type: Sequelize.INTEGER,
+        unique: true
     }
 })
 

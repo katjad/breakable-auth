@@ -28,20 +28,22 @@ app.use(express.static(path.join(__dirname, 'public')));
 // authentication
 auth(app);
 
+// routes
 app.get('/', index)
 
-app.get('/users', ensureAuthenticated, users)
+
 
 app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
 })
 
-function ensureAuthenticated(req,res,next){
-  if(req.isAuthenticated())
-    return next();
-  res.redirect('/');
-}
+// function ensureAuthenticated(req,res,next){
+//   if(req.isAuthenticated())
+//     return next();
+//   res.redirect('/');
+// }
+
 // error handlers
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,0 +1,16 @@
+extends layout
+
+block content
+    .ui.middle.aligned.center.aligned.grid
+        .column
+            h1.ui.teal.header Login successful
+            div
+                p This JWT was created for you:
+                .ui.middle.aligned.center.aligned.grid
+                    div#token #{token}
+                p  &nbsp;
+                p
+                    a(href="/") Back to start
+block footer
+    script(src="/javascripts/saveToLocal.js")
+
