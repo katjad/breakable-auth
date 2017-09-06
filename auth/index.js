@@ -31,8 +31,7 @@ module.exports = function(app){
         return User.findOne({ where: { github_id: payload.sub } })
         .then(user => { 
           if(user) {
-            console.log("hooray")
-            done(null, user) 
+             done(null, user) 
           } else {
             done(null, false)
           }
@@ -43,14 +42,30 @@ module.exports = function(app){
     passport.use(jwtLogin)
 
 
-
     passport.use(new GitHubStrategy({
         clientID: config.GITHUB_CLIENT_ID || process.env.CLIENT_ID,
         clientSecret: config.GITHUB_CLIENT_SECRET || process.env.CLIENT_SECRET,
-        callbackURL: '/auth/github/callback',
+        callbackURL: '/profile',
       },
       function(accessToken, refreshToken, user, cb) {
-          return cb(null, user);
+          User.sync().then(() => {
+          return User.findOrCreate(
+          { where: {
+              github_id: user.id
+            }, defaults: {
+              name: user.displayName, 
+              username: user.username, 
+              email: user._json.email
+            }
+          }).spread((user, created) => {
+            console.log(user.get({
+              plain: true
+            }))
+            // res.redirect('/profile/'+user.github_id)
+             return cb(null, user);
+          })       
+      })
+         
       }
     ));
 
@@ -71,37 +86,19 @@ module.exports = function(app){
 
     //OAuth authentication route
     app.get('/auth/github', passport.authenticate('github'));
-    app.get('/auth/github/callback', 
+    app.get('/profile', 
       passport.authenticate('github', { session: false, failureRedirect: '/' }), 
       function(req, res) {
-        const user = req.user;
-        User.sync().then(() => {
-          return User.findOrCreate(
-          { where: {
-              github_id: user.id
-            }, defaults: {
-              name: user.displayName, 
-              username: user.username, 
-              email: user._json.email
-            }
-          }).spread((user, created) => {
-            console.log(user.get({
-              plain: true
-            }))
-            res.redirect('/profile/'+user.github_id)
-          })       
-      })
+        const user = req.user;        
+        //res.redirect('/profile/'+user.github_id)
+        const token = tokenForUser(user.git_id)
+        console.log(token)
+        res.render('profile', {user: user, token: token})
     })
 
-
-    app.get('/profile/:git_id', (req, res, next) => {
-        res.render('profile', {token: tokenForUser(req.params.git_id)})
-        //res.json({token: tokenForUser(req.params.git_id)})
-    })
-    
+  
     const requireAuth = passport.authenticate('jwt', {session: false}) 
 
     // get all Items or one item
     app.get('/item*', requireAuth,  items)  // yay, this works!!
- 
 }

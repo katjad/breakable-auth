@@ -11,23 +11,6 @@ module.exports = function(app){
     .catch(err => {
     console.error('Unable to connect to the database:', err);
     });
-
-    // User.sync({force: true}).then(() => {
-    //     return User.create({
-    //     username: 'spacegal',
-    //     name: 'Katja',
-    //     email: 'mail@example.com'
-    //     });
-    // }).then(() => {
-    //     return User.findAll()
-    // }).then(users =>console.log(users))
-
-    // Item.sync({force: true}).then(() => {
-    //     return Item.create({
-    //         title: 'Let us learn about Promises',
-    //         link: 'http://heres_a_link_to_google_doc'
-    //     })
-    // })
 }
 
 
