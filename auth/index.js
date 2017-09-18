@@ -1,6 +1,3 @@
-// learned this pattern from Stephen Grider Udemy Tut 
-// on Authentication with React
-
 module.exports = function(app){  
 
     const passport = require('passport')
@@ -15,6 +12,8 @@ module.exports = function(app){
     const items = require('../routes/items')
 
     app.use(passport.initialize());
+
+
     // JWT
     function tokenForUser(github_id) {
       const timestamp = new Date().getTime()
@@ -26,7 +25,8 @@ module.exports = function(app){
     }
     const jwtLogin = new JwtStrategy(jwtOptions, function(payload, done){
       // see if user ID in payload exists in database
-
+      console.log("payload", payload)
+      console.log("sub", payload.sub)
       User.sync().then(() => {
         return User.findOne({ where: { github_id: payload.sub } })
         .then(user => { 
@@ -42,6 +42,7 @@ module.exports = function(app){
     passport.use(jwtLogin)
 
 
+    // Github
     passport.use(new GitHubStrategy({
         clientID: config.GITHUB_CLIENT_ID || process.env.CLIENT_ID,
         clientSecret: config.GITHUB_CLIENT_SECRET || process.env.CLIENT_SECRET,
@@ -61,28 +62,12 @@ module.exports = function(app){
             console.log(user.get({
               plain: true
             }))
-            // res.redirect('/profile/'+user.github_id)
-             return cb(null, user);
+            return cb(null, user);
           })       
-      })
-         
+        })         
       }
     ));
 
-    // setting the token in the header if we have been redirected to profile after Github auth
-    // unfortunately can't use this as to get the token from the header have to do a new 
-    // request and then the token changes!
-    setTokenInHeader = (req, res, next) => {
-      const arr =  req.url.split('/')
-      if(arr[1] == 'profile' && arr[2]){
-        const token = tokenForUser(arr[2])
-        console.log(token)
-        res.setHeader('jwt', token)
-        console.log("again", token)
-      }
-      next()      
-    }
-    // app.use(setTokenInHeader)
 
     //OAuth authentication route
     app.get('/auth/github', passport.authenticate('github'));
@@ -91,14 +76,13 @@ module.exports = function(app){
       function(req, res) {
         const user = req.user;        
         //res.redirect('/profile/'+user.github_id)
-        const token = tokenForUser(user.git_id)
-        console.log(token)
+        const token = tokenForUser(user.github_id)
         res.render('profile', {user: user, token: token})
     })
 
-  
     const requireAuth = passport.authenticate('jwt', {session: false}) 
 
     // get all Items or one item
     app.get('/item*', requireAuth,  items)  // yay, this works!!
+
 }

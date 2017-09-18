@@ -1,6 +1,5 @@
 const button = document.getElementById('viewItems')
 button.addEventListener("click", function(e){
-    console.log("clicked")
     getPageWithAuth('/items')    
 })
 
