@@ -32,7 +32,7 @@ auth(app);
 app.get('/', index)
 
 app.get('/unauthorized', function(req, res){
-  res.render('index', {message: "You need to log in first"})
+  res.render('index', {message: "You need to sign in with Github first"})
 })
 
 app.get('/logout', function(req, res){
