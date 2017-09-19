@@ -11,9 +11,9 @@ Technologies used besides Node/Express and Passport:
 - LocalStorage
 - History API
 
-Some notes regarding the authentication: The initial authentication is happening through GitHub Oauth, using the [passport-github](https://github.com/jaredhanson/passport-github) library. Instead of using a session, at this step a JWT token is generated which is saved to Localstorage in the browser. A middleware function using the Passport JWT strategy can then be used to protect content from unauthorized access. 
+Some notes regarding the authentication: The initial authentication is happening through GitHub Oauth, using the [passport-github](https://github.com/jaredhanson/passport-github) library. Instead of using a session, at this step a JWT token is generated which is saved to Localstorage in the browser.
 
-Initially I found it a bit tricky to pass the JWT token to the browser and then use it for authentication. But with Pug you can pass data into a rendered template. So, from the backend you can render a profile page and pass user data and token to it.
+You can pass data to a template when you render it, so we can make the JWT available on the profile page like this:
 ```res.render('profile', {user: user, token: token})```
 On the frontend, a script can then grab the token and store it in LocalStorage. 
 
