@@ -1,5 +1,7 @@
 extends layout
 
+
+
 block content
   .ui.middle.aligned.center.aligned.grid
     .column
@@ -15,7 +17,12 @@ block content
             p &nbsp;
             p &nbsp;                  
         div 
-            button#viewItems Check out protected content
+            .ui.fluid.large.teal.button#viewItems  Check out protected content
+        p
+        if message
+            div 
+                .ui.fluid.large.red.button #{message}
+
 block footer
     script(src="/javascripts/checkAuth.js")
 

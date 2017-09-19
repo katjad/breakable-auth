@@ -8,8 +8,14 @@ function getPageWithAuth(url){
     req.open('GET', url, true)
     req.setRequestHeader('authorization', localStorage.getItem("jwt"))
     req.onload = function(e){
-        console.log(req.response)
-        document.body.innerHTML = req.response
+        if(req.response == "Unauthorized"){
+             window.location.href = "/unauthorized"
+        }
+        document.body.innerHTML = req.response        
     }
-    req.send()    
+    req.send() 
+    window.onpopstate = function(event) {
+      window.location.href = "/";
+    }; 
+    window.history.pushState({"pageInfo": {"title": "Items"}}, "Items", "/items")  
 }

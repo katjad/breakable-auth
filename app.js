@@ -31,6 +31,10 @@ auth(app);
 // routes
 app.get('/', index)
 
+app.get('/unauthorized', function(req, res){
+  res.render('index', {message: "You need to log in first"})
+})
+
 app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
