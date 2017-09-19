@@ -47,7 +47,7 @@ npm install
 
 ```
 
-You will need to register a GitHub OAuth application here and put the credentials in a file called ```appConfig.js``` at root level like this, as well as a secret to generate tokens:
+You will need to register a [GitHub OAuth application](https://github.com/settings/developers) and put the credentials in a file called ```appConfig.js``` at root level like this, as well as a secret to generate tokens:
 ```
 module.exports = {
   GITHUB_CLIENT_ID: 'xxxxxxxxxxxxxxxxxxxx',
